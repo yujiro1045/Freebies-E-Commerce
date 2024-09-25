@@ -1,37 +1,41 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { Link, Stack } from "expo-router";
+import { Colors } from "@/constants/Colors";
+import BellIcon from "@/assets/icons/BellIcon.svg";
+import ShopingCarIcon from "@/assets/icons/ShopingCarIcon.svg";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+const _layout = () => {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors.primary.pureWhite,
+        },
+        title: "Mega Mall",
+        headerTintColor: Colors.primary.blueOcean,
+        headerTitleAlign: "center",
+        headerRight: () => (
+          <View style={styles.iconsContainer}>
+            <Link href={"/(tabs)/wishlist"}>
+              <BellIcon width={25} height={25} />
+            </Link>
+            <Link href={"/(tabs)/order"}>
+              <ShopingCarIcon width={25} height={25} />
+            </Link>
+          </View>
+        ),
+      }}
+    />
   );
-}
+};
+
+const styles = StyleSheet.create({
+  iconsContainer: {
+    flexDirection: "row",
+    gap: 18,
+    right: 10,
+  },
+});
+
+export default _layout;
